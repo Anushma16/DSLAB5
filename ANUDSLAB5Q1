@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool nextPermutation(vector<int>& nums) {
+    int n = nums.size();
+    int i = n - 2;
+
+    // Step 1: Find first decreasing element from the end
+    while (i >= 0 && nums[i] >= nums[i + 1])
+        i--;
+
+    if (i >= 0) {
+        // Step 2: Find element just larger than nums[i]
+        int j = n - 1;
+        while (nums[j] <= nums[i])
+            j--;
+        swap(nums[i], nums[j]);
+    }
+
+    // Step 3: Reverse the subarray from i+1 to end
+    reverse(nums.begin() + i + 1, nums.end());
+
+    return i >= 0;
+}
+
+int main() {
+    vector<int> nums;
+    int n, val;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    cout << "Enter the elements: ";
+    for (int i = 0; i < n; ++i) {
+        cin >> val;
+        nums.push_back(val);
+    }
+
+    if (nextPermutation(nums)) {
+        cout << "Next permutation: ";
+    } else {
+        cout << "This is the last permutation. First permutation is: ";
+    }
+
+    // Regular for loop instead of range-based for
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
