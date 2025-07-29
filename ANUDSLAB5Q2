@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Function to generate next r-combination
+bool nextCombination(vector<int>& comb, int n, int r) {
+    int i = r - 1;
+
+    // Find the rightmost element that can be increased
+    while (i >= 0 && comb[i] == n - r + i)
+        i--;
+
+    if (i < 0)
+        return false; // No next combination
+
+    comb[i]++;
+
+    for (int j = i + 1; j < r; ++j)
+        comb[j] = comb[j - 1] + 1;
+
+    return true;
+}
+
+int main() {
+    int n, r;
+
+    cout << "Enter n (total elements): ";
+    cin >> n;
+    cout << "Enter r (size of combination): ";
+    cin >> r;
+
+    if (r > n || r <= 0 || n <= 0) {
+        cout << "Invalid input!" << endl;
+        return 0;
+    }
+
+    // Initialize the first combination [0, 1, 2, ..., r-1]
+    vector<int> comb(r);
+    for (int i = 0; i < r; ++i)
+        comb[i] = i;
+
+    // Display current combination
+    cout << "Current combination: ";
+    for (int i = 0; i < r; ++i)
+        cout << comb[i] << " ";
+    cout << endl;
+
+    // Generate and display next combination
+    if (nextCombination(comb, n, r)) {
+        cout << "Next combination: ";
+        for (int i = 0; i < r; ++i)
+            cout << comb[i] << " ";
+        cout << endl;
+    } else {
+        cout << "No next combination. This is the last one." << endl;
+    }
+
+    return 0;
+}
