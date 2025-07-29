@@ -1,0 +1,57 @@
+#include <iostream>
+#include <cstdlib> // for rand()
+#include <ctime> // for time()
+
+using namespace std;
+
+// Fast modular exponentiation: (a^b) % mod
+long long power(long long a, long long b, long long mod) {
+    long long result = 1;
+    a = a % mod;
+
+    while (b > 0) {
+        if (b % 2 == 1)
+            result = (result * a) % mod;
+        a = (a * a) % mod;
+        b = b / 2;
+    }
+
+    return result;
+}
+
+// Fermat primality test
+bool isProbablyPrime(int n, int k) {
+    if (n <= 1 || n == 4)
+        return false;
+    if (n <= 3)
+        return true;
+
+    // Run k iterations
+    for (int i = 0; i < k; ++i) {
+        int a = 2 + rand() % (n - 3); // Random a in [2, n-2]
+        if (power(a, n - 1, n) != 1)
+            return false; // Definitely composite
+    }
+
+    return true; // Probably prime
+}
+
+int main() {
+    int n, k;
+
+    cout << "Enter the number to test: ";
+    cin >> n;
+
+    cout << "Enter number of iterations (higher = more accurate): ";
+    cin >> k;
+
+    // Seed random number generator
+    srand(time(0));
+
+    if (isProbablyPrime(n, k))
+        cout << n << " is probably prime." << endl;
+    else
+        cout << n << " is composite." << endl;
+
+    return 0;
+}
